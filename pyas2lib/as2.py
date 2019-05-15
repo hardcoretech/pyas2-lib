@@ -757,7 +757,7 @@ class Mdn(object):
                 message.receiver and message.receiver.sign_key:
             self.digest_alg = \
                 message.headers['disposition-notification-options'].split(
-                    ';')[-1].split(',')[-1].strip().replace('-', '')
+                    ';')[-1].split(',')[-1].strip().replace('-', '').lower()
             signed_mdn = MIMEMultipart(
                 'signed', protocol="application/pkcs7-signature")
             del signed_mdn['MIME-Version']
