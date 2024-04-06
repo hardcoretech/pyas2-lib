@@ -370,8 +370,19 @@ def verify_message(data_to_verify, signature, verify_cert):
 
             if signed_attributes:
                 attr_dict = {}
+                
+                try:
+                    # Workaround the error through evaluating the native value twice
+                    # `ValueError: Unknown element - context class, constructed method, tag 0`
+                    signed_attributes.native
+                except ValueError:
+                    pass
+
                 for attr in signed_attributes.native:
-                    attr_dict[attr['type']] = attr['values']
+                    try:
+                        attr_dict[attr['type']] = attr['values']
+                    except (ValueError, KeyError):
+                        continue
 
                 message_digest = bytes()
                 for d in attr_dict['message_digest']:
